@@ -1,19 +1,32 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+import { createAppContainer } from 'react-navigation';
+import { isSignedIn } from './src/services/auth';
+
+import createRootNavigator from './src/routes';
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      signed: false,
+      signLoaded: false,
+    };
+  }
+
+  componentDidMount() {
+    isSignedIn()
+      .then((res) => this.setState({ signed: res, signLoaded: true }));
+  }
+
+  render() {
+    const { signed, signLoaded } = this.state;
+
+    if (!signLoaded) return null;
+
+    const Layout = createRootNavigator(signed);
+    const Routes = createAppContainer(Layout);
+    return <Routes />;
+  }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
