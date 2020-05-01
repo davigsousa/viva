@@ -65,11 +65,6 @@ export default function Feed() {
 
   return (
     <View>
-      <Header>
-        <IconButton image={premium} onPress={() => console.log('Icon1')} />
-        <Logo source={logo} />
-        <IconButton image={conta} onPress={() => console.log('Icon1')} />
-      </Header>
       <FlatList
         data={feed}
         onEndReached={() => {

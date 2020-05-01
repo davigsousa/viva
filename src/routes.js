@@ -8,13 +8,25 @@ import Feed from './pages/Feed';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 
+import logo from '../assets/logo.png';
 import posts from '../assets/IconePosts.png';
 import home from '../assets/IconeHome.png';
 import carrinho from '../assets/IconeCarrinho.png';
 
-
-const FeedStack = createStackNavigator({
-  Feed,
+const FeedStack = createStackNavigator({ Feed }, {
+  defaultNavigationOptions: {
+    headerTitle: () => (
+      <Image
+        source={logo}
+        resizeMode="contain"
+        style={{ width: 100 }}
+      />
+    ),
+    headerStyle: {
+      backgroundColor: '#bbbbbb',
+    },
+    headerTitleAlign: 'center',
+  },
 });
 
 const imageStyle = {
@@ -26,7 +38,7 @@ const imageStyle = {
 
 const signedInRoutes = createBottomTabNavigator({
   Feed: {
-    screen: Feed,
+    screen: FeedStack,
     navigationOptions: {
       tabBarLabel: <Image source={posts} style={imageStyle} />,
     },

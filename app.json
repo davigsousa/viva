@@ -22,7 +22,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.viva.app"
+    },
+    "android": {
+      "package": "com.viva.app"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
