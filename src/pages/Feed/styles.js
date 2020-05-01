@@ -1,11 +1,23 @@
 import styled from 'styled-components/native';
 
+export const Header = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 20px;
+`;
+
+export const Logo = styled.Image`
+  width: 100px;
+  height: 40px;
+`;
+
 export const Post = styled.View`
   flex: 1;
   margin-top: 10px;
 `;
 
-export const Header = styled.View`
+export const PostHeader = styled.View`
   padding: 15px;
   flex-direction: row;
   align-items: center;

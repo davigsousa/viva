@@ -1,41 +1,64 @@
 import styled from 'styled-components/native';
-import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  padding: 0 20px;
+`;
+
+export const TitleContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
 `;
 
+export const LoginContainer = styled.View`
+  width: 100%;
+  height: 50%;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 export const Logo = styled.Image`
+  margin: 50px 0 5px 0;
   width: 200px;
+  height: 80px;
 `;
 
 export const Title = styled.Text`
   color: #ff6600;
   font-weight: bold;
-  font-size: 32px;
+  font-size: 26px;
+`;
+
+export const Divider = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+`;
+
+export const Barrier = styled.View`
+  margin: 10px;
+  width: 80px;
+  border: solid 1px #777;
 `;
 
 export const Description = styled.Text`
-  color: #993366;
+  color: #777;
   text-align: center;
-  width: 300px;
   font-size: 18px;
 `;
 
-export const SocialContainer = styled.View`
-  margin-top: 30px;
-  width: 100%;
-  padding: 20px;
-  align-items: center;
-  justify-content: center;
+export const Footer = styled.Text`
+  color: #777;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 20px;
 `;
 
-export const SocialButton = styled(RectButton)`
-  width: 80%;
-  padding: 16px;
-  background-color: #993366;
-  color: white;
-  border-radius: 10px;
+export const SocialContainer = styled.View`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 `;

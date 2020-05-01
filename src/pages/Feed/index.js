@@ -2,10 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, FlatList } from 'react-native';
 
 import LazyImage from '../../components/LazyImage';
+import IconButton from '../../components/IconButton';
 
 import {
-  Post, Header, Avatar, Name, Description, Loading,
+  Post, PostHeader, Avatar, Name, Description, Loading, Header, Logo,
 } from './styles';
+
+import premium from '../../../assets/IconePremium.png';
+import logo from '../../../assets/logo.png';
+import conta from '../../../assets/IconeConta.png';
+
+import feedStatic from '../../services/feedStatic';
 
 export default function Feed() {
   const [feed, setFeed] = useState([]);
@@ -15,7 +22,7 @@ export default function Feed() {
   const [refreshing, setRefreshing] = useState(false);
   const [changed, setChanged] = useState([]);
 
-  async function loadPage(pageNumber = page, shouldRefresh = false) {
+  /* async function loadPage(pageNumber = page, shouldRefresh = false) {
     if (total && pageNumber > total) return;
 
     setLoading(true);
@@ -31,10 +38,11 @@ export default function Feed() {
     setFeed(shouldRefresh ? data : [...feed, ...data]);
     setPage(page + 1);
     setLoading(false);
-  }
+  } */
 
   useEffect(() => {
-    loadPage();
+    // loadPage();
+    setFeed(feedStatic);
 
     return () => {
       setFeed([]);
@@ -46,7 +54,7 @@ export default function Feed() {
   async function refreshList() {
     setRefreshing(true);
 
-    await loadPage(1, true);
+    // await loadPage(1, true);
 
     setRefreshing(false);
   }
@@ -57,9 +65,17 @@ export default function Feed() {
 
   return (
     <View>
+      <Header>
+        <IconButton image={premium} onPress={() => console.log('Icon1')} />
+        <Logo source={logo} />
+        <IconButton image={conta} onPress={() => console.log('Icon1')} />
+      </Header>
       <FlatList
         data={feed}
-        onEndReached={() => loadPage()}
+        onEndReached={() => {
+          // loadPage()
+          console.log('chegou ao fim');
+        }}
         onEndReachedThreshold={0.1}
         keyExtractor={(post) => String(post.id)}
         onRefresh={refreshList}
@@ -71,10 +87,10 @@ export default function Feed() {
         ListFooterComponent={loading && <Loading />}
         renderItem={({ item }) => (
           <Post>
-            <Header>
+            <PostHeader>
               <Avatar source={{ uri: item.author.avatar }} />
               <Name>{item.author.name}</Name>
-            </Header>
+            </PostHeader>
 
             <LazyImage
               shouldLoad={changed.includes(item.id)}
