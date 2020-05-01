@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { View, FlatList } from 'react-native';
 
 import LazyImage from '../../components/LazyImage';
@@ -9,11 +11,12 @@ import {
   Post, PostHeader, Avatar, Name, Description, Loading, User,
 } from './styles';
 
-import diamante from '../../../assets/IconeDiamante.png';
+import diamante from '../../../assets/iconesC/diamante.png';
 
+import { getSellerInfo } from '../../services/user';
 import feedStatic from '../../services/feedStatic';
 
-export default function Feed() {
+function Feed({ dispatch }) {
   const [feed, setFeed] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -42,6 +45,14 @@ export default function Feed() {
   useEffect(() => {
     // loadPage();
     setFeed(feedStatic);
+
+    (async () => {
+      const res = await getSellerInfo();
+      dispatch({
+        type: 'TOGGLE_USER_TYPE',
+        isSeller: res,
+      });
+    })();
 
     return () => {
       setFeed([]);
@@ -108,3 +119,9 @@ export default function Feed() {
     </View>
   );
 }
+
+Feed.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect(({ isSeller }, ownProps) => ({ isSeller, ...ownProps }))(Feed);

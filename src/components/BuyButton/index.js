@@ -5,7 +5,7 @@ import {
   Button, PriceLabel, Price, Divider, BuyLabel, Buy, BuyArrow,
 } from './styles';
 
-import seta from '../../../assets/IconeSeta.png';
+import seta from '../../../assets/seta.png';
 
 function BuyButton({ oldPrice = '', price, onPress }) {
   return (

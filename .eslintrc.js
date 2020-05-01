@@ -25,5 +25,6 @@ module.exports = {
     "react/jsx-filename-extension": "off",
     "no-underscore-dangle": "off",
     "import/no-extraneous-dependencies": "off",
+    "react/jsx-props-no-spreading": "off",
   },
 };

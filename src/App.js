@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-
+import { Provider } from 'react-redux';
 import { createAppContainer } from 'react-navigation';
+
+import store from './store';
 import { isSignedIn } from './services/auth';
 
 import createRootNavigator from './routes';
 
-export default class App extends Component {
+
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -27,6 +30,12 @@ export default class App extends Component {
 
     const Layout = createRootNavigator(signed);
     const Routes = createAppContainer(Layout);
-    return <Routes />;
+    return (
+      <Provider store={store}>
+        <Routes />
+      </Provider>
+    );
   }
 }
+
+export default App;

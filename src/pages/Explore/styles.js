@@ -16,13 +16,13 @@ export const InputContainer = styled.View`
   height: 50px;
   flex-direction: row;
   align-items: center;
-  border: solid 2px #ff6600;
+  border: solid 2px ${(props) => props.theme.color};
   border-radius: 25px;
   padding: 0 20px 0 10px;
 `;
 
 export const Input = styled.TextInput`
-  color: #ff6600;
+  color: ${(props) => props.theme.color};
   flex: 1;
   height: 100%;
   font-size: 20px;

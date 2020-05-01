@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { FlatList } from 'react-native';
+import { ThemeProvider } from 'styled-components';
 
 import IconButton from '../../components/IconButton';
 
@@ -10,9 +13,10 @@ import {
   StoreImage, StoreDetails, Username, Description, Address, StoreWrapper,
 } from './styles';
 
-import lupa from '../../../assets/IconeLupa.png';
+import lupaC from '../../../assets/iconesC/lupa.png';
+import lupaS from '../../../assets/iconesV/lupa.png';
 
-export default function Explore() {
+function Explore({ isSeller }) {
   const [stores, setStores] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -57,44 +61,52 @@ export default function Explore() {
   }
 
   return (
-    <Container>
-      <InputWrapper>
-        <InputContainer>
-          <Input
-            placeholder="Pesquisar..."
-            placeholderTextColor="#ff6600"
-          />
-          <IconButton image={lupa} onPress={() => console.log('pesquisar')} />
-        </InputContainer>
-      </InputWrapper>
+    <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
+      <Container>
+        <InputWrapper>
+          <InputContainer>
+            <Input
+              placeholder="Pesquisar..."
+              placeholderTextColor={isSeller ? '#993366' : '#ff6600'}
+            />
+            <IconButton image={isSeller ? lupaS : lupaC} onPress={() => console.log('pesquisar')} />
+          </InputContainer>
+        </InputWrapper>
 
-      <FlatList
-        data={stores}
-        onEndReached={() => {
-          // loadPage()
-          console.log('chegou ao fim');
-        }}
-        onEndReachedThreshold={0.1}
-        keyExtractor={(store) => String(store.id)}
-        onRefresh={refreshList}
-        refreshing={refreshing}
-        ListFooterComponent={loading && <Loading />}
-        renderItem={({ item }) => (
-          <StoreWrapper>
-            <Store>
-              <StoreImage
-                source={{ uri: item.avatar }}
-              />
+        <FlatList
+          data={stores}
+          onEndReached={() => {
+            // loadPage()
+            console.log('chegou ao fim');
+          }}
+          onEndReachedThreshold={0.1}
+          keyExtractor={(store) => String(store.id)}
+          onRefresh={refreshList}
+          refreshing={refreshing}
+          ListFooterComponent={loading && <Loading />}
+          renderItem={({ item }) => (
+            <StoreWrapper>
+              <Store>
+                <StoreImage
+                  source={{ uri: item.avatar }}
+                />
 
-              <StoreDetails>
-                <Username>{item.name}</Username>
-                <Description>{item.description}</Description>
-                <Address>{item.address}</Address>
-              </StoreDetails>
-            </Store>
-          </StoreWrapper>
-        )}
-      />
-    </Container>
+                <StoreDetails>
+                  <Username>{item.name}</Username>
+                  <Description>{item.description}</Description>
+                  <Address>{item.address}</Address>
+                </StoreDetails>
+              </Store>
+            </StoreWrapper>
+          )}
+        />
+      </Container>
+    </ThemeProvider>
   );
 }
+
+Explore.propTypes = {
+  isSeller: PropTypes.bool.isRequired,
+};
+
+export default connect(({ isSeller }, ownProps) => ({ isSeller, ...ownProps }))(Explore);
