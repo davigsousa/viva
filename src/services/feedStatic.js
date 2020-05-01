@@ -2,7 +2,6 @@ export default [
   {
     id: 1,
     image: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/1.jpeg',
-    small: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/small/1.jpeg',
     aspectRatio: 0.834,
     description: 'Working hard at Rocketseat!',
     author: {
@@ -14,7 +13,6 @@ export default [
   {
     id: 2,
     image: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/2.jpeg',
-    small: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/small/2.jpeg',
     aspectRatio: 0.834,
     description: 'Code, code and more code!',
     author: {
@@ -26,7 +24,6 @@ export default [
   {
     id: 3,
     image: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/3.jpeg',
-    small: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/small/3.jpeg',
     aspectRatio: 0.834,
     description: 'Rocketships fly away!',
     author: {

@@ -5,4 +5,8 @@
     <item name="android:windowTranslucentStatus">true</item>
     <item name="colorPrimary">@color/colorPrimary</item>
   </style>
+
+  <style name="SplashTheme" parent="AppTheme">
+    <item name="android:windowBackground">@drawable/screen</item>
+  </style>
 </resources>

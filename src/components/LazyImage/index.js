@@ -4,10 +4,11 @@ import { Animated } from 'react-native';
 
 import { Small, Original } from './styles';
 
+import backfake from '../../../assets/backfake.png';
+
 const OriginalAnimated = Animated.createAnimatedComponent(Original);
 
 function LazyImage({
-  smallSource,
   source,
   aspectRatio,
   shouldLoad,
@@ -29,7 +30,7 @@ function LazyImage({
 
   return (
     <Small
-      source={smallSource}
+      source={backfake}
       ratio={aspectRatio}
       blurRadius={1}
     >
@@ -49,9 +50,6 @@ function LazyImage({
 }
 
 LazyImage.propTypes = {
-  smallSource: PropTypes.shape({
-    uri: PropTypes.string,
-  }).isRequired,
   source: PropTypes.shape({
     uri: PropTypes.string,
   }).isRequired,

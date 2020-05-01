@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TouchableNativeFeedback, Image } from 'react-native';
+import { TouchableOpacity, Image } from 'react-native';
 
 
 function IconButton({ onPress, image }) {
   return (
-    <TouchableNativeFeedback onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
       <Image source={image} resizeMode="contain" style={{ width: 32, height: 32 }} />
-    </TouchableNativeFeedback>
+    </TouchableOpacity>
   );
 }
 

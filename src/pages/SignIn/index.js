@@ -8,7 +8,7 @@ import {
 
 import logo from '../../../assets/logo.png';
 
-export default function SignIn() {
+export default function SignIn({ navigation }) {
   const [loginProgress, setLoginProgress] = useState(false);
 
   return (
@@ -31,14 +31,14 @@ export default function SignIn() {
             title="Fazer login com o Facebook"
             icon="facebook"
             color="#0164E0"
-            onPress={() => console.log('facebook')}
+            onPress={() => navigation.navigate('SignedIn')}
           />
           <SocialButton
             enabled={!loginProgress}
             title="Fazer login com o Google"
             icon="google"
             color="#D44C3D"
-            onPress={() => console.log('google')}
+            onPress={() => navigation.navigate('SignedIn')}
           />
         </SocialContainer>
 
@@ -47,42 +47,3 @@ export default function SignIn() {
     </Container>
   );
 }
-
-
-/* import React, { useState } from 'react';
-
-import SocialButton from '../../components/SocialButton';
-import {
-  Container, Logo, Title, Description, SocialContainer,
-} from './styles';
-
-import logo from '../../../assets/logo.png';
-
-export default function SignIn() {
-  const [loginProgress, setLoginProgress] = useState(false);
-
-  return (
-    <Container>
-      <Logo source={logo} resizeMode="contain" />
-      <Title>Inicie sua Sessão</Title>
-      <Description>escolha a sua rede social favorita</Description>
-
-      <SocialContainer>
-        <SocialButton
-          enabled={!loginProgress}
-          title="Fazer login com o Facebook"
-          icon="facebook"
-          color="#0164E0"
-          onPress={() => console.log('facebook')}
-        />
-        <SocialButton
-          enabled={!loginProgress}
-          title="Fazer login com o Google"
-          icon="google"
-          color="#D44C3D"
-          onPress={() => console.log('google')}
-        />
-      </SocialContainer>
-    </Container>
-  );
-} */

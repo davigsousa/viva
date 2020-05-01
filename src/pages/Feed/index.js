@@ -5,12 +5,10 @@ import LazyImage from '../../components/LazyImage';
 import IconButton from '../../components/IconButton';
 
 import {
-  Post, PostHeader, Avatar, Name, Description, Loading, Header, Logo,
+  Post, PostHeader, Avatar, Name, Description, Loading, User,
 } from './styles';
 
-import premium from '../../../assets/IconePremium.png';
-import logo from '../../../assets/logo.png';
-import conta from '../../../assets/IconeConta.png';
+import diamante from '../../../assets/IconeDiamante.png';
 
 import feedStatic from '../../services/feedStatic';
 
@@ -83,14 +81,16 @@ export default function Feed() {
         renderItem={({ item }) => (
           <Post>
             <PostHeader>
-              <Avatar source={{ uri: item.author.avatar }} />
-              <Name>{item.author.name}</Name>
+              <User>
+                <Avatar source={{ uri: item.author.avatar }} />
+                <Name>{item.author.name}</Name>
+              </User>
+              <IconButton image={diamante} onPress={() => console.log('curtir')} />
             </PostHeader>
 
             <LazyImage
               shouldLoad={changed.includes(item.id)}
               aspectRatio={item.aspectRatio}
-              smallSource={{ uri: item.small }}
               source={{ uri: item.image }}
             />
 

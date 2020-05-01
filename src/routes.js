@@ -11,7 +11,7 @@ import Explore from './pages/Explore';
 import logo from '../assets/logo.png';
 import posts from '../assets/IconePosts.png';
 import home from '../assets/IconeHome.png';
-import carrinho from '../assets/IconeCarrinho.png';
+import lupa from '../assets/lupa.png';
 
 const FeedStack = createStackNavigator({ Feed }, {
   defaultNavigationOptions: {
@@ -23,7 +23,7 @@ const FeedStack = createStackNavigator({ Feed }, {
       />
     ),
     headerStyle: {
-      backgroundColor: '#bbbbbb',
+      backgroundColor: '#f5f5f5',
     },
     headerTitleAlign: 'center',
   },
@@ -52,7 +52,7 @@ const signedInRoutes = createBottomTabNavigator({
   Explore: {
     screen: Explore,
     navigationOptions: {
-      tabBarLabel: <Image source={carrinho} style={imageStyle} />,
+      tabBarLabel: <Image source={lupa} style={imageStyle} />,
     },
   },
 });
@@ -74,7 +74,7 @@ const createRootNavigation = (signedIn = false) => createStackNavigator({
 }, {
   headerMode: 'none',
   mode: 'modal',
-  initialRouteName: signedIn ? 'SignedOut' : 'SignedIn',
+  initialRouteName: signedIn ? 'SignedIn' : 'SignedOut',
   navigationOptions: {
     gesturesEnabled: false,
   },
