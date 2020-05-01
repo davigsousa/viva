@@ -3,31 +3,15 @@ import { Image } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
+import { FeedStack, ExploreStack } from './stacks';
+
 import SignIn from './pages/SignIn';
-import Feed from './pages/Feed';
 import Home from './pages/Home';
-import Explore from './pages/Explore';
 
-import logo from '../assets/logo.png';
-import posts from '../assets/IconePosts.png';
+import perfil from '../assets/IconePerfil.png';
 import home from '../assets/IconeHome.png';
-import lupa from '../assets/lupa.png';
+import lupa from '../assets/IconeLupa.png';
 
-const FeedStack = createStackNavigator({ Feed }, {
-  defaultNavigationOptions: {
-    headerTitle: () => (
-      <Image
-        source={logo}
-        resizeMode="contain"
-        style={{ width: 100 }}
-      />
-    ),
-    headerStyle: {
-      backgroundColor: '#f5f5f5',
-    },
-    headerTitleAlign: 'center',
-  },
-});
 
 const imageStyle = {
   width: 30,
@@ -37,25 +21,25 @@ const imageStyle = {
 };
 
 const signedInRoutes = createBottomTabNavigator({
-  Feed: {
-    screen: FeedStack,
-    navigationOptions: {
-      tabBarLabel: <Image source={posts} style={imageStyle} />,
-    },
-  },
   Home: {
     screen: Home,
+    navigationOptions: {
+      tabBarLabel: <Image source={perfil} style={imageStyle} />,
+    },
+  },
+  Feed: {
+    screen: FeedStack,
     navigationOptions: {
       tabBarLabel: <Image source={home} style={imageStyle} />,
     },
   },
   Explore: {
-    screen: Explore,
+    screen: ExploreStack,
     navigationOptions: {
       tabBarLabel: <Image source={lupa} style={imageStyle} />,
     },
   },
-});
+}, { initialRouteName: 'Feed' });
 
 const signedOutRoutes = createStackNavigator({
   SignIn,

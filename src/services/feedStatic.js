@@ -2,6 +2,7 @@ export default [
   {
     id: 1,
     image: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/1.jpeg',
+    price: '100.00',
     aspectRatio: 0.834,
     description: 'Working hard at Rocketseat!',
     author: {
@@ -13,6 +14,7 @@ export default [
   {
     id: 2,
     image: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/2.jpeg',
+    price: '80.00',
     aspectRatio: 0.834,
     description: 'Code, code and more code!',
     author: {
@@ -24,6 +26,7 @@ export default [
   {
     id: 3,
     image: 'https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/3.jpeg',
+    price: '4000.99',
     aspectRatio: 0.834,
     description: 'Rocketships fly away!',
     author: {

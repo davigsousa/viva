@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 import { createAppContainer } from 'react-navigation';
-import { isSignedIn } from './src/services/auth';
+import { isSignedIn } from './services/auth';
 
-import createRootNavigator from './src/routes';
+import createRootNavigator from './routes';
 
 export default class App extends Component {
   constructor(props) {

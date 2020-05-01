@@ -3,6 +3,7 @@ import { View, FlatList } from 'react-native';
 
 import LazyImage from '../../components/LazyImage';
 import IconButton from '../../components/IconButton';
+import BuyButton from '../../components/BuyButton';
 
 import {
   Post, PostHeader, Avatar, Name, Description, Loading, User,
@@ -93,6 +94,8 @@ export default function Feed() {
               aspectRatio={item.aspectRatio}
               source={{ uri: item.image }}
             />
+
+            <BuyButton price={item.price} onPress={() => console.log('comprei')} />
 
             <Description>
               <Name>{item.author.name}</Name>
