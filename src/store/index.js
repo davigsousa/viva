@@ -1,13 +1,13 @@
 import { createStore } from 'redux';
 
 const INITIAL_STATE = {
-  isSeller: true,
+  isSeller: false,
 };
 
 function reducer(state = INITIAL_STATE, action) {
-  if (action.type === 'TOOGLE_USER_TYPE') {
+  if (action.type === 'TOGGLE_USER_TYPE') {
     return {
-      ...state, isSeller: !action.isSeller,
+      ...state, isSeller: action.isSeller,
     };
   }
 

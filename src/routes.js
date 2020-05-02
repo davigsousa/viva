@@ -2,10 +2,9 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import { FeedStack, ExploreStack } from './stacks';
+import { FeedStack, ExploreStack, ProfileStack } from './stacks';
 
 import SignIn from './pages/SignIn';
-import Home from './pages/Home';
 
 import homeC from '../assets/iconesC/home.png';
 import homeS from '../assets/iconesV/home.png';
@@ -18,23 +17,23 @@ import BarButton from './components/BarButton';
 
 
 const signedInRoutes = createBottomTabNavigator({
-  Home: {
-    screen: Home,
-    navigationOptions: {
-      tabBarButtonComponent: (propsNav) => (
-        <BarButton propsNav={propsNav} icon={homeC} iconS={homeS} />
-      ),
-    },
-  },
-  Feed: {
-    screen: FeedStack,
+  ProfileStack: {
+    screen: ProfileStack,
     navigationOptions: {
       tabBarButtonComponent: (propsNav) => (
         <BarButton propsNav={propsNav} icon={perfilC} iconS={perfilS} />
       ),
     },
   },
-  Explore: {
+  FeedStack: {
+    screen: FeedStack,
+    navigationOptions: {
+      tabBarButtonComponent: (propsNav) => (
+        <BarButton propsNav={propsNav} icon={homeC} iconS={homeS} />
+      ),
+    },
+  },
+  ExploreStack: {
     screen: ExploreStack,
     navigationOptions: {
       tabBarButtonComponent: (propsNav) => (
@@ -42,7 +41,7 @@ const signedInRoutes = createBottomTabNavigator({
       ),
     },
   },
-}, { initialRouteName: 'Feed' });
+}, { initialRouteName: 'FeedStack' });
 
 const signedOutRoutes = createStackNavigator({
   SignIn,

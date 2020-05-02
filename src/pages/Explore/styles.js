@@ -6,10 +6,18 @@ export const Container = styled.View`
 `;
 
 export const InputWrapper = styled.View`
+  align-items: center;
+  justify-content: center;
   width: 100%;
   padding: 15px;
   border-bottom-width: 1px;
   border-bottom-color: #ddd;
+`;
+
+export const Title = styled.Text`
+  color: #993366;
+  font-size: 30px;
+  font-weight: bold;
 `;
 
 export const InputContainer = styled.View`

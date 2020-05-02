@@ -6,7 +6,7 @@ import { TouchableOpacity, Image } from 'react-native';
 function IconButton({ onPress, image }) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <Image source={image} resizeMode="contain" style={{ width: 32, height: 32 }} />
+      <Image source={image} resizeMode="contain" style={{ width: 30, height: 30 }} />
     </TouchableOpacity>
   );
 }

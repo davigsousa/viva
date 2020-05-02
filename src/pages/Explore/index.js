@@ -9,12 +9,11 @@ import IconButton from '../../components/IconButton';
 import exploreStatic from '../../services/exploreStatic';
 
 import {
-  Container, InputContainer, Input, Loading, InputWrapper, Store,
+  Container, InputContainer, Input, Loading, InputWrapper, Store, Title,
   StoreImage, StoreDetails, Username, Description, Address, StoreWrapper,
 } from './styles';
 
 import lupaC from '../../../assets/iconesC/lupa.png';
-import lupaS from '../../../assets/iconesV/lupa.png';
 
 function Explore({ isSeller }) {
   const [stores, setStores] = useState([]);
@@ -64,13 +63,22 @@ function Explore({ isSeller }) {
     <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
       <Container>
         <InputWrapper>
-          <InputContainer>
-            <Input
-              placeholder="Pesquisar..."
-              placeholderTextColor={isSeller ? '#993366' : '#ff6600'}
-            />
-            <IconButton image={isSeller ? lupaS : lupaC} onPress={() => console.log('pesquisar')} />
-          </InputContainer>
+          {
+            isSeller
+              ? (
+                <Title>Últimos Pedidos</Title>
+              )
+              : (
+                <InputContainer>
+                  <Input
+                    placeholder="Pesquisar..."
+                    placeholderTextColor="#ff6600"
+                  />
+                  <IconButton image={lupaC} onPress={() => console.log('pesquisar')} />
+                </InputContainer>
+              )
+          }
+
         </InputWrapper>
 
         <FlatList

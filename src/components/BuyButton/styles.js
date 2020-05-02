@@ -5,7 +5,7 @@ export const Button = styled(RectButton)`
   padding: 10px 0 10px 0;
   width: 100%;
   flex-direction: row;
-  background-color: #ff6600;
+  background-color: ${(props) => props.theme.color};
 `;
 
 export const PriceLabel = styled.View`
