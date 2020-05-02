@@ -29,11 +29,11 @@ export const DetailsContainer = styled.View`
 
 export const Name = styled.Text`
   font-weight: bold;
-  font-size: 25px;
+  font-size: 20px;
 `;
 
 export const Username = styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 10px;
 `;
 
@@ -66,13 +66,14 @@ export const EditLabel = styled.Text`
 `;
 
 export const Icon = styled.Image`
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
 `;
 
 export const PickerContainer = styled.View`
   width: 100%;
   height: 50px;
+  padding-right: 10px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -88,7 +89,5 @@ export const PickerLabel = styled.Text`
 `;
 
 export const CategoryPicker = styled.Picker`
-  align-self: flex-end;
-  width: 200px;
-  background-color: #ddd;
+  width: 60%;
 `;

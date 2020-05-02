@@ -14,7 +14,7 @@ import {
   EditContainer, EditButton, EditLabel, CategoryPicker, Icon, PickerContainer, PickerLabel,
 } from './styles';
 
-import editar from '../../../assets/iconesV/editar.png';
+import editar from '../../../assets/editarCatalogo.png';
 
 function Catalog({ isSeller }) {
   const [posts, setPosts] = useState([]);
@@ -67,7 +67,7 @@ function Catalog({ isSeller }) {
         }
 
         <PickerContainer>
-          <PickerLabel>Escolha a categoria:</PickerLabel>
+          <PickerLabel>Categoria:</PickerLabel>
           <CategoryPicker
             selectedValue={selectedOption}
             onValueChange={(itemValue) => setSelectedOption(itemValue)}
