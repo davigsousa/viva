@@ -4,18 +4,21 @@ import { connect } from 'react-redux';
 import { FlatList } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 
+import OrderItem from '../../components/OrderItem';
+import StoreItem from '../../components/StoreItem';
 import IconButton from '../../components/IconButton';
 
+import ordersStatic from '../../services/ordersStatic';
 import exploreStatic from '../../services/exploreStatic';
 
 import {
-  Container, InputContainer, Input, Loading, InputWrapper, Store, Title,
-  StoreImage, StoreDetails, Username, Description, Address, StoreWrapper,
+  Container, InputContainer, Input, Loading, InputWrapper, Title,
 } from './styles';
 
 import lupaC from '../../../assets/iconesC/lupa.png';
 
-function Explore({ isSeller }) {
+function Explore({ isSeller, navigation }) {
+  const [orders, setOrders] = useState([]);
   const [stores, setStores] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -42,14 +45,20 @@ function Explore({ isSeller }) {
 
   useEffect(() => {
     // loadPage();
-    setStores(exploreStatic);
+    if (isSeller) {
+      setStores([]);
+      setOrders(ordersStatic);
+    } else {
+      setOrders([]);
+      setStores(exploreStatic);
+    }
 
     return () => {
       setStores([]);
       setPage(1);
       setTotal(0);
     };
-  }, []);
+  }, [isSeller]);
 
   async function refreshList() {
     setRefreshing(true);
@@ -82,7 +91,7 @@ function Explore({ isSeller }) {
         </InputWrapper>
 
         <FlatList
-          data={stores}
+          data={isSeller ? orders : stores}
           onEndReached={() => {
             // loadPage()
             console.log('chegou ao fim');
@@ -93,20 +102,19 @@ function Explore({ isSeller }) {
           refreshing={refreshing}
           ListFooterComponent={loading && <Loading />}
           renderItem={({ item }) => (
-            <StoreWrapper>
-              <Store>
-                <StoreImage
-                  source={{ uri: item.avatar }}
+            isSeller
+              ? (
+                <OrderItem name={item.name} owner={item.owner} date={item.date} />
+              )
+              : (
+                <StoreItem
+                  avatar={item.avatar}
+                  name={item.name}
+                  description={item.description}
+                  address={item.address}
+                  onPress={() => navigation.navigate('Catalog')}
                 />
-
-                <StoreDetails>
-                  <Username>{item.name}</Username>
-                  <Description>{item.description}</Description>
-                  <Address>{item.address}</Address>
-                </StoreDetails>
-              </Store>
-            </StoreWrapper>
-          )}
+              ))}
         />
       </Container>
     </ThemeProvider>
@@ -114,6 +122,9 @@ function Explore({ isSeller }) {
 }
 
 Explore.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
   isSeller: PropTypes.bool.isRequired,
 };
 

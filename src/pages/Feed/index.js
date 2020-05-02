@@ -4,24 +4,21 @@ import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 import { View, FlatList } from 'react-native';
 
-import LazyImage from '../../components/LazyImage';
 import IconButton from '../../components/IconButton';
-import BuyButton from '../../components/BuyButton';
+import PostItem from '../../components/PostItem';
 
 import {
-  Post, PostHeader, Avatar, Name, Description, Loading, User,
-  AddPostContainer, AddPost, AddPostWrapper, AddPostButton,
+  Loading, AddPostContainer, AddPost, AddPostWrapper, AddPostButton,
 } from './styles';
 
 import camera from '../../../assets/iconesV/camera.png';
-import opcoes from '../../../assets/iconesV/opcoes.png';
-import diamante from '../../../assets/iconesC/diamante.png';
 
 import { getSellerInfo } from '../../services/user';
-import feedStatic from '../../services/feedStatic';
+import feedV from '../../services/feedV';
+import feedC from '../../services/feedC';
 
 
-function Feed({ isSeller, dispatch }) {
+function Feed({ isSeller, dispatch, navigation }) {
   const [feed, setFeed] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -49,7 +46,6 @@ function Feed({ isSeller, dispatch }) {
 
   useEffect(() => {
     // loadPage();
-    setFeed(feedStatic);
 
     (async () => {
       const res = await getSellerInfo();
@@ -96,7 +92,7 @@ function Feed({ isSeller, dispatch }) {
             : undefined
         }
         <FlatList
-          data={feed}
+          data={isSeller ? feedV : feedC}
           onEndReached={() => {
             // loadPage()
             console.log('chegou ao fim');
@@ -111,32 +107,18 @@ function Feed({ isSeller, dispatch }) {
           }}
           ListFooterComponent={loading && <Loading />}
           renderItem={({ item }) => (
-            <Post>
-              <PostHeader>
-                <User>
-                  <Avatar source={{ uri: item.author.avatar }} />
-                  <Name>{item.author.name}</Name>
-                </User>
-                <IconButton
-                  image={isSeller ? opcoes : diamante}
-                  onPress={() => console.log('opções')}
-                />
-              </PostHeader>
-
-              <LazyImage
-                shouldLoad={changed.includes(item.id)}
-                aspectRatio={item.aspectRatio}
-                source={{ uri: item.image }}
-              />
-
-              <BuyButton price={item.price} onPress={() => console.log('comprei')} />
-
-              <Description>
-                <Name>{item.author.name}</Name>
-                {' '}
-                {item.description}
-              </Description>
-            </Post>
+            <PostItem
+              isSeller={isSeller}
+              avatar={item.author.avatar}
+              name={item.author.name}
+              onUser={() => navigation.navigate('Catalog')}
+              changed={changed}
+              id={item.id}
+              aspectRatio={item.aspectRatio}
+              image={item.image}
+              price={item.price}
+              description={item.description}
+            />
           )}
         />
       </View>
@@ -147,6 +129,9 @@ function Feed({ isSeller, dispatch }) {
 Feed.propTypes = {
   isSeller: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
 };
 
 export default connect(({ isSeller }, ownProps) => ({ isSeller, ...ownProps }))(Feed);

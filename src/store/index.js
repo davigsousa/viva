@@ -6,6 +6,7 @@ const INITIAL_STATE = {
 
 function reducer(state = INITIAL_STATE, action) {
   if (action.type === 'TOGGLE_USER_TYPE') {
+    console.log('TOGGLE USER');
     return {
       ...state, isSeller: action.isSeller,
     };

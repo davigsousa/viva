@@ -12,8 +12,12 @@ function IconButton({ onPress, image }) {
 }
 
 IconButton.propTypes = {
-  onPress: PropTypes.func.isRequired,
+  onPress: PropTypes.func,
   image: PropTypes.number.isRequired,
+};
+
+IconButton.defaultProps = {
+  onPress: undefined,
 };
 
 export default IconButton;

@@ -1,3 +1,3 @@
 export const getSellerInfo = () => new Promise((resolve) => setTimeout(() => {
-  resolve(true);
+  resolve(false);
 }, 400));

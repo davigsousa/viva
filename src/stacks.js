@@ -3,12 +3,13 @@ import { Image } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import Profile from './pages/Profile';
+import Catalog from './pages/Catalog';
 import Feed from './pages/Feed';
 import Explore from './pages/Explore';
 
 import logo from '../assets/logo.png';
 
-export const ProfileStack = createStackNavigator({ Profile }, {
+export const ProfileStack = createStackNavigator({ Profile, Catalog }, {
   defaultNavigationOptions: {
     headerTitle: () => (
       <Image

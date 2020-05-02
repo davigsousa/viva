@@ -24,12 +24,14 @@ function BuyButton({ oldPrice = '', price, onPress }) {
 
 BuyButton.propTypes = {
   oldPrice: PropTypes.string,
-  price: PropTypes.string.isRequired,
-  onPress: PropTypes.func.isRequired,
+  price: PropTypes.string,
+  onPress: PropTypes.func,
 };
 
 BuyButton.defaultProps = {
   oldPrice: '',
+  price: '',
+  onPress: undefined,
 };
 
 export default BuyButton;
