@@ -16,7 +16,7 @@ import {
 
 import editar from '../../../assets/editarCatalogo.png';
 
-function Catalog({ isSeller }) {
+function Catalog({ isSeller, navigation }) {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState({ username: '', image: 'https://fabianoalves.adv.br/wp-content/uploads/2016/11/avatar-default-2.png', description: '' });
   const [options, setOptions] = useState([
@@ -57,7 +57,7 @@ function Catalog({ isSeller }) {
           isSeller
             ? (
               <EditContainer>
-                <EditButton>
+                <EditButton onPress={() => navigation.navigate('EditCatalog')}>
                   <EditLabel>Editar o seu Catálogo</EditLabel>
                   <Icon source={editar} />
                 </EditButton>

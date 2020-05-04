@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 import { View, FlatList } from 'react-native';
 
+import LoadingModal from '../../components/LoadingModal';
 import IconButton from '../../components/IconButton';
 import PostItem from '../../components/PostItem';
 
@@ -13,7 +15,8 @@ import {
 
 import camera from '../../../assets/iconesV/camera.png';
 
-import { getSellerInfo } from '../../services/user';
+import api from '../../services/api';
+import { setUser } from '../../services/auth';
 import feedV from '../../services/feedV';
 import feedC from '../../services/feedC';
 
@@ -23,6 +26,7 @@ function Feed({ isSeller, dispatch, navigation }) {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [changed, setChanged] = useState([]);
 
@@ -48,11 +52,16 @@ function Feed({ isSeller, dispatch, navigation }) {
     // loadPage();
 
     (async () => {
-      const res = await getSellerInfo();
+      setLoadingModal(true);
+      const { data } = await api.get('/user');
+      await setUser(data);
+      console.log('get', data);
+
       dispatch({
         type: 'TOGGLE_USER_TYPE',
-        isSeller: res,
+        isSeller: data.shop_pass,
       });
+      setLoadingModal(false);
     })();
 
     return () => {
@@ -82,8 +91,17 @@ function Feed({ isSeller, dispatch, navigation }) {
             ? (
               <AddPostWrapper>
                 <AddPostContainer>
-                  <AddPostButton>
-                    <AddPost>Adicionar Post</AddPost>
+                  <AddPostButton onPress={() => {
+                    const navigateAction = NavigationActions.navigate({
+                      routeName: 'AddPost',
+                      params: { previous_screen: 'Feed' },
+                      action: NavigationActions.navigate({ routeName: 'AddPost' }),
+                    });
+
+                    navigation.dispatch(navigateAction);
+                  }}
+                  >
+                    <AddPost>Adicionar Post/Produto</AddPost>
                     <IconButton image={camera} onPress={() => console.log('camera')} />
                   </AddPostButton>
                 </AddPostContainer>
@@ -121,6 +139,8 @@ function Feed({ isSeller, dispatch, navigation }) {
             />
           )}
         />
+
+        <LoadingModal isVisible={loadingModal} />
       </View>
     </ThemeProvider>
   );

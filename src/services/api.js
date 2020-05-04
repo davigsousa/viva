@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken } from './auth';
 
 const api = axios.create({
-  baseURL: 'https://backend-viva.herokuapp.com/',
+  baseURL: 'https://backend-viva.herokuapp.com',
 });
 
 api.interceptors.request.use(async (config) => {

@@ -63,12 +63,3 @@ export const SocialContainer = styled.View`
   align-items: center;
   justify-content: center;
 `;
-
-export const LoadingModal = styled(Modal)``;
-
-export const Loading = styled.ActivityIndicator.attrs({
-  size: 'large',
-  collor: '#999',
-})`
-  margin: 30px 0;
-`;

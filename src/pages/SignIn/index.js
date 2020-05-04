@@ -6,10 +6,11 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 import api from '../../services/api';
 import { setToken, login, logout } from '../../services/auth';
 
+import LoadingModal from '../../components/LoadingModal';
 import SocialButton from '../../components/SocialButton';
 import {
   Container, Logo, Title, Description, SocialContainer, Footer, Divider,
-  Barrier, LoginContainer, TitleContainer, LoadingModal, Loading,
+  Barrier, LoginContainer, TitleContainer,
 } from './styles';
 
 import logo from '../../../assets/logo.png';
@@ -107,9 +108,7 @@ function SignIn({ navigation }) {
         <Footer>Versão 0.1</Footer>
       </LoginContainer>
 
-      <LoadingModal isVisible={loading}>
-        <Loading />
-      </LoadingModal>
+      <LoadingModal isVisible={loading} />
     </Container>
   );
 }

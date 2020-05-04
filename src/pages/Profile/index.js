@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 
+import SellerHelper from '../../components/SellerHelper';
 import IconButton from '../../components/IconButton';
 import ProfileButton from '../../components/ProfileButton';
 
@@ -25,23 +26,39 @@ import {
   ButtonTitle, FooterContainer, FooterLabel, FooterImage, Version,
 } from './styles';
 
+import { getUser, getSellerInfo } from '../../services/auth';
+
+const AVATAR = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
 function Profile({ isSeller, dispatch, navigation }) {
-  const [user, setUser] = useState({ username: '', image: 'https://fabianoalves.adv.br/wp-content/uploads/2016/11/avatar-default-2.png', description: '' });
+  const [sellerHelper, setSellerHelper] = useState(false);
+  const [user, setUser] = useState({
+    name: '',
+    url_image: AVATAR,
+    description: '',
+  });
 
   useEffect(() => {
-    setUser(isSeller
-      ? {
-        username: 'lojasmaia',
-        description: 'Uma loja especial para você!',
-        image: 'https://img.elo7.com.br/product/main/2261CBD/logo-semi-pronta-logotipo-logo-loja.jpg',
-      }
-      : {
-        username: 'manoela.maia',
-        description: 'Eu sou uma pessoa fantástica.',
-        image: 'https://cdn.pixabay.com/photo/2015/09/02/13/24/girl-919048_960_720.jpg',
+    (async () => {
+      setUser(await getUser());
+    })();
+  }, []);
+
+  const handleChangeProfile = async () => {
+    if (await getSellerInfo()) {
+      dispatch({
+        type: 'TOGGLE USER',
+        isSeller: true,
       });
-  }, [isSeller]);
+    } else {
+      setSellerHelper(!sellerHelper);
+    }
+  };
+
+  const onConfirmSeller = () => {
+    setSellerHelper(!sellerHelper);
+    navigation.navigate('EditStore');
+  };
 
   return (
     <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
@@ -49,22 +66,16 @@ function Profile({ isSeller, dispatch, navigation }) {
 
         <Container>
           <ProfileContainer>
-            <Avatar source={{ uri: user.image }} resizeMode="cover" />
-            <Username>{user.username}</Username>
-            <Description>{user.description}</Description>
-            <ChangeButton onPress={async () => {
-              dispatch({
-                type: 'TOGGLE_USER_TYPE',
-                isSeller: !isSeller,
-              });
-            }}
-            >
+            <Avatar source={{ uri: user.url_image }} resizeMode="cover" />
+            <Username>{user.name}</Username>
+            <Description>{isSeller ? user.description : ''}</Description>
+            <ChangeButton onPress={handleChangeProfile}>
               <ButtonTitle>
                 Mudar para
                 {' '}
                 {isSeller ? 'Cliente' : 'Vendedor'}
               </ButtonTitle>
-              <IconButton image={seta} onPress={() => console.log('seta')} />
+              <IconButton image={seta} />
             </ChangeButton>
           </ProfileContainer>
 
@@ -108,6 +119,12 @@ function Profile({ isSeller, dispatch, navigation }) {
             <Version>Versão 0.1</Version>
           </FooterContainer>
         </Container>
+
+        <SellerHelper
+          isVisible={sellerHelper}
+          onConfirm={onConfirmSeller}
+          onClose={() => setSellerHelper(!sellerHelper)}
+        />
       </ScrollView>
     </ThemeProvider>
   );
