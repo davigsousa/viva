@@ -64,9 +64,7 @@ export const SocialContainer = styled.View`
   justify-content: center;
 `;
 
-export const LoadingModal = styled(Modal)`
-
-`;
+export const LoadingModal = styled(Modal)``;
 
 export const Loading = styled.ActivityIndicator.attrs({
   size: 'large',
