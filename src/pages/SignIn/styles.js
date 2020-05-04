@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import Modal from 'react-native-modal';
 
 export const Container = styled.View`
   flex: 1;
@@ -61,4 +62,15 @@ export const SocialContainer = styled.View`
   width: 100%;
   align-items: center;
   justify-content: center;
+`;
+
+export const LoadingModal = styled(Modal)`
+
+`;
+
+export const Loading = styled.ActivityIndicator.attrs({
+  size: 'large',
+  collor: '#999',
+})`
+  margin: 30px 0;
 `;

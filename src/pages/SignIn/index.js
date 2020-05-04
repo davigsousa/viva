@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { LoginManager, AccessToken } from 'react-native-fbsdk';
-import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
+import { GoogleSignin } from '@react-native-community/google-signin';
 
 import api from '../../services/api';
 import { setToken, login, logout } from '../../services/auth';
 
 import SocialButton from '../../components/SocialButton';
 import {
-  Container, Logo, Title, Description, SocialContainer, Footer,
-  Divider, Barrier, LoginContainer, TitleContainer,
+  Container, Logo, Title, Description, SocialContainer, Footer, Divider,
+  Barrier, LoginContainer, TitleContainer, LoadingModal, Loading,
 } from './styles';
 
 import logo from '../../../assets/logo.png';
@@ -18,15 +19,23 @@ GoogleSignin.configure({
   webClientId: '478431704395-270093ooa7nv5mfmkuh0bs537lv2k04i.apps.googleusercontent.com',
 });
 
-export default function SignIn({ navigation }) {
+function SignIn({ navigation }) {
+  const [loading, setLoading] = useState(false);
   const [loginProgress, setLoginProgress] = useState(false);
 
   const makeServerLogin = async (social, token) => {
     await logout();
     await setToken(token);
-    const res = await api.post(`/user?by=${social}`);
-    const { token: userToken, user } = res.data;
-    await login(userToken, user);
+    try {
+      const res = await api.post(`/user?by=${social}`);
+      const { token: userToken, user } = res.data;
+      await login(userToken, user);
+
+      setLoading(false);
+      navigation.navigate('SignedIn');
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   const handleLogin = (by) => {
@@ -38,6 +47,7 @@ export default function SignIn({ navigation }) {
           if (res.isCancelled) setLoginProgress(false);
           else {
             setLoginProgress(false);
+            setLoading(true);
 
             AccessToken.getCurrentAccessToken()
               .then((data) => {
@@ -50,26 +60,14 @@ export default function SignIn({ navigation }) {
     if (by === 'google') {
       (async () => {
         try {
-          const actualTokens = await GoogleSignin.getTokens();
-          await GoogleSignin.clearCachedAccessToken(actualTokens.accessToken);
           await GoogleSignin.hasPlayServices();
           await GoogleSignin.signIn();
+          setLoginProgress(false);
+          setLoading(true);
           const tokens = await GoogleSignin.getTokens();
           await makeServerLogin('google', tokens.accessToken);
-
-          setLoginProgress(false);
         } catch (error) {
-          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-            setLoginProgress(false);
-          } else if (error.code === statusCodes.IN_PROGRESS) {
-            setLoginProgress(false);
-          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            setLoginProgress(false);
-            console.log('services');
-          } else {
-            setLoginProgress(false);
-            console.log('outro', error);
-          }
+          setLoginProgress(false);
         }
       })();
     }
@@ -108,6 +106,18 @@ export default function SignIn({ navigation }) {
 
         <Footer>Versão 0.1</Footer>
       </LoginContainer>
+
+      <LoadingModal isVisible={loading}>
+        <Loading />
+      </LoadingModal>
     </Container>
   );
 }
+
+SignIn.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
+};
+
+export default SignIn;
