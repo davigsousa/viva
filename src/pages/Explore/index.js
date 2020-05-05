@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FlatList } from 'react-native';
 import { ThemeProvider } from 'styled-components';
+import { NavigationActions } from 'react-navigation';
 
 import OrderItem from '../../components/OrderItem';
 import StoreItem from '../../components/StoreItem';
 import IconButton from '../../components/IconButton';
 
-import ordersStatic from '../../services/ordersStatic';
-import exploreStatic from '../../services/exploreStatic';
+import api from '../../services/api';
 
 import {
   Container, InputContainer, Input, InputWrapper, Title,
@@ -21,23 +21,31 @@ function Explore({ isSeller, navigation }) {
   const [orders, setOrders] = useState([]);
   const [stores, setStores] = useState([]);
 
+  async function loadOrders() {
+    const res = await api.get('/wishs');
+    const orders = res.data;
+    setOrders(orders);
+  }
+
+  async function loadStores() {
+    const res = await api.get('/explorer');
+    const stores = res.data;
+    setStores(stores);
+  }
 
   useEffect(() => {
     // loadPage();
-    if (isSeller) {
-      setStores([]);
-      setOrders(ordersStatic);
-    } else {
-      setOrders([]);
-      setStores(exploreStatic);
-    }
-
-    return () => {
-      setStores([]);
-      setOrders([]);
-    };
+    (async () => {
+      if (isSeller) {
+        setStores([]);
+        loadOrders();
+      } else {
+        setOrders([]);
+        loadStores();
+      }
+    })();
   }, [isSeller]);
-
+  console.log(orders);
   return (
     <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
       <Container>
@@ -67,15 +75,23 @@ function Explore({ isSeller, navigation }) {
           renderItem={({ item }) => (
             isSeller
               ? (
-                <OrderItem name={item.name} owner={item.owner} date={item.date} />
+                <OrderItem name={item.product.name} owner={item.user.name} date={item.date} />
               )
               : (
                 <StoreItem
-                  avatar={item.avatar}
+                  avatar={item.url_image}
                   name={item.name}
                   description={item.description}
                   address={item.address}
-                  onPress={() => navigation.navigate('Catalog')}
+                  onPress={() => {
+                    const navigateAction = NavigationActions.navigate({
+                      routeName: 'Catalog',
+                      params: { store: item },
+                      action: NavigationActions.navigate({ routeName: 'Catalog' }),
+                    });
+
+                    navigation.dispatch(navigateAction);
+                  }}
                 />
               )
           )}
