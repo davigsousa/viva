@@ -45,7 +45,7 @@ function Feed({ isSeller, dispatch, navigation }) {
   async function loadPageSeller() {
     setLoading(true);
     const userStore = await getStore();
-    const { data } = await api.get(`/products/${userStore.username}`);
+    const { data } = await api.get(`/products/${userStore.username}/all`);
     const { products } = data;
     setFeed(products);
     setStateStore(userStore);

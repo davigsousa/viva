@@ -23,9 +23,8 @@ function Catalog({ isSeller, navigation }) {
   const [selectedOption, setSelectedOption] = useState('');
 
   const fetchNewPosts = async (category) => {
-    const { data } = await api.get(`/products/${store.username}`, {
-      category,
-    });
+    category = !category ? 'all' : category;
+    const { data } = await api.get(`/products/${store.username}/${category}`);
     const { products } = data;
     setPosts(products);
   };
@@ -34,7 +33,6 @@ function Catalog({ isSeller, navigation }) {
     fetchNewPosts();
     (async () => {
       const { data } = await api.get(`/categories/${store.username}`);
-      console.log(data);
       setOptions(data);
     })();
   }, []);

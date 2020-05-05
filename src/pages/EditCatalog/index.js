@@ -33,11 +33,9 @@ function EditCatalogo({ navigation }) {
 
   const fetchNewPosts = async (category) => {
     const res = await getStore();
-    const { data } = await api.get(`/products/${res.username}`, {
-      category,
-    });
+    category = !category ? 'all' : category;
+    const { data } = await api.get(`/products/${res.username}/${category}`);
     const { products } = data;
-    console.log(products);
     setPosts(products);
   };
 
@@ -106,7 +104,7 @@ function EditCatalogo({ navigation }) {
               shouldWait={false}
               id={item.id}
               image={item.url_image}
-              price={item.price}
+              price={String(item.price).replace('.', ',')}
               description={item.description}
             />
           ))
