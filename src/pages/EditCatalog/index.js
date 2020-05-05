@@ -31,17 +31,18 @@ function EditCatalogo({ navigation }) {
     setOptions([...options, cat]);
   };
 
-  const fetchNewPosts = async () => {
+  const fetchNewPosts = async (category) => {
     const res = await getStore();
-    setPosts([]);
     const { data } = await api.get(`/products/${res.username}`, {
-      category: selectedOption,
+      category,
     });
     const { products } = data;
+    console.log(products);
     setPosts(products);
   };
 
   useEffect(() => {
+    fetchNewPosts();
     (async () => {
       const res = await getStore();
 
@@ -50,10 +51,6 @@ function EditCatalogo({ navigation }) {
       setOptions(data);
     })();
   }, []);
-
-  useEffect(() => {
-    fetchNewPosts();
-  }, [selectedOption]);
 
   return (
     <Container>
@@ -69,7 +66,7 @@ function EditCatalogo({ navigation }) {
         <CategoryPicker
           selectedValue={selectedOption}
           onValueChange={(itemValue) => {
-            console.log('mudou haueaueauheau');
+            fetchNewPosts(itemValue);
             setSelectedOption(itemValue);
           }}
         >

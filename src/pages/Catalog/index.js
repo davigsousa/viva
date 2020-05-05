@@ -22,15 +22,16 @@ function Catalog({ isSeller, navigation }) {
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 
-  const fetchNewPosts = async () => {
+  const fetchNewPosts = async (category) => {
     const { data } = await api.get(`/products/${store.username}`, {
-      category: selectedOption,
+      category,
     });
     const { products } = data;
     setPosts(products);
   };
 
   useEffect(() => {
+    fetchNewPosts();
     (async () => {
       const { data } = await api.get(`/categories/${store.username}`);
       console.log(data);
@@ -38,9 +39,9 @@ function Catalog({ isSeller, navigation }) {
     })();
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     fetchNewPosts();
-  }, [selectedOption]);
+  }, [selectedOption]); */
 
   return (
     <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
@@ -80,7 +81,10 @@ function Catalog({ isSeller, navigation }) {
           <PickerLabel>Categoria:</PickerLabel>
           <CategoryPicker
             selectedValue={selectedOption}
-            onValueChange={(itemValue) => setSelectedOption(itemValue)}
+            onValueChange={(itemValue) => {
+              fetchNewPosts(itemValue);
+              setSelectedOption(itemValue);
+            }}
           >
             <Picker.Item label="Todos os Produtos" value="" />
             {
