@@ -141,7 +141,15 @@ function Feed({ isSeller, dispatch, navigation }) {
               isSeller={isSeller}
               avatar={store.url_image}
               name={isSeller ? store.username : item.username}
-              onUser={() => navigation.navigate('Catalog')}
+              onUser={() => {
+                const navigateAction = NavigationActions.navigate({
+                  routeName: 'Catalog',
+                  params: { store: item },
+                  action: NavigationActions.navigate({ routeName: 'Catalog' }),
+                });
+
+                navigation.dispatch(navigateAction);
+              }}
               id={item.id}
               aspect_ratio={Number.parseFloat(item.aspectRatio)}
               image={item.url_image}

@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Linking } from 'react-native';
 import PropTypes from 'prop-types';
 
+import BuyModal from '../BuyModal';
 import LazyImage from '../LazyImage';
 import IconButton from '../IconButton';
 import BuyButton from '../BuyButton';
+
+import api from '../../services/api';
 
 import {
   Post, PostHeader, User, Avatar, Name, Description, PriceLabel, Price,
@@ -17,6 +21,17 @@ function PostItem({
   isSeller, avatar, name, image,
   price, description, showHeader = true, onUser,
 }) {
+  const [buyModal, setBuyModal] = useState(false);
+
+  const handleBuy = async () => {
+    const { data } = await api.get(`/contact/${name}`);
+    const { whatsapp } = data;
+
+    const url = `https://api.whatsapp.com/send?phone=${whatsapp}`;
+
+    await Linking.openURL(url);
+  };
+
   return (
     <Post>
       {
@@ -44,7 +59,7 @@ function PostItem({
 
       {
         !isSeller
-          ? (<BuyButton price={price} onPress={() => console.log('comprei')} />)
+          ? (<BuyButton price={price} onPress={() => setBuyModal(true)} />)
           : (
             <Price>
               <PriceLabel>{`R$${price}`}</PriceLabel>
@@ -57,6 +72,14 @@ function PostItem({
         {' '}
         {description}
       </Description>
+
+      <BuyModal
+        isVisible={buyModal}
+        title="Finalize a Compra"
+        message="Iremos lhe direcionar o Whatsapp do vendedor."
+        onClose={() => setBuyModal(false)}
+        onConfirm={handleBuy}
+      />
     </Post>
   );
 }

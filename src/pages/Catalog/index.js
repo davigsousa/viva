@@ -30,6 +30,12 @@ function Catalog({ isSeller, navigation }) {
   };
 
   useEffect(() => {
+    (async () => {
+      const { data: storeData } = await api.get(`/products/${store.username}/all`);
+      const { store: newStore } = storeData;
+      setStore(newStore);
+    })();
+
     fetchNewPosts();
     (async () => {
       const { data } = await api.get(`/categories/${store.username}`);
