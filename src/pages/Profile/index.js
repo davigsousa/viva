@@ -26,11 +26,12 @@ import {
   ButtonTitle, FooterContainer, FooterLabel, FooterImage, Version,
 } from './styles';
 
-import { getUser, getSellerInfo } from '../../services/auth';
+import { getUser, getSellerInfo, getStore } from '../../services/auth';
 
 const AVATAR = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
 function Profile({ isSeller, dispatch, navigation }) {
+  const [store, setStore] = useState({});
   const [sellerHelper, setSellerHelper] = useState(false);
   const [user, setUser] = useState({
     name: '',
@@ -41,17 +42,27 @@ function Profile({ isSeller, dispatch, navigation }) {
   useEffect(() => {
     (async () => {
       setUser(await getUser());
+      setStore(await getStore());
     })();
   }, []);
 
-  const handleChangeProfile = async () => {
-    if (await getSellerInfo()) {
-      dispatch({
-        type: 'TOGGLE USER',
-        isSeller: true,
-      });
+  const handleChangeProfile = async (to) => {
+    const actualIsSeller = await getSellerInfo();
+
+    if (to === 'seller') {
+      if (actualIsSeller) {
+        dispatch({
+          type: 'TOGGLE_USER_TYPE',
+          isSeller: true,
+        });
+      } else {
+        setSellerHelper(!sellerHelper);
+      }
     } else {
-      setSellerHelper(!sellerHelper);
+      dispatch({
+        type: 'TOGGLE_USER_TYPE',
+        isSeller: false,
+      });
     }
   };
 
@@ -66,10 +77,17 @@ function Profile({ isSeller, dispatch, navigation }) {
 
         <Container>
           <ProfileContainer>
-            <Avatar source={{ uri: user.url_image }} resizeMode="cover" />
-            <Username>{user.name}</Username>
-            <Description>{isSeller ? user.description : ''}</Description>
-            <ChangeButton onPress={handleChangeProfile}>
+            <Avatar source={{ uri: isSeller ? store.url_image : user.url_image }} resizeMode="cover" />
+            <Username>{isSeller ? store.name : user.name}</Username>
+            <Description>{isSeller ? store.description : user.description}</Description>
+            <ChangeButton onPress={() => {
+              if (isSeller) {
+                handleChangeProfile('consumer');
+              } else {
+                handleChangeProfile('seller');
+              }
+            }}
+            >
               <ButtonTitle>
                 Mudar para
                 {' '}

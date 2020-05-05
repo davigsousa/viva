@@ -28,5 +28,7 @@ module.exports = {
     "react/jsx-props-no-spreading": "off",
     "no-param-reassign": "off",
     "react/prop-types": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "camelcase": "off",
   },
 };

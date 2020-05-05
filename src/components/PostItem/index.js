@@ -14,8 +14,8 @@ import diamante from '../../../assets/iconesC/diamante.png';
 
 
 function PostItem({
-  isSeller, avatar, name, changed = [], id, aspectRatio, image,
-  price, description, showHeader = true, shouldWait = true, onUser,
+  isSeller, avatar, name, image,
+  price, description, showHeader = true, onUser,
 }) {
   return (
     <Post>
@@ -37,8 +37,8 @@ function PostItem({
       }
 
       <LazyImage
-        shouldLoad={!shouldWait ? true : changed.includes(id)}
-        aspectRatio={aspectRatio}
+        shouldLoad
+        aspectRatio={1}
         source={{ uri: image }}
       />
 
@@ -65,16 +65,10 @@ PostItem.propTypes = {
   isSeller: PropTypes.bool.isRequired,
   avatar: PropTypes.string,
   name: PropTypes.string,
-  changed: PropTypes.arrayOf(
-    PropTypes.number,
-  ),
-  id: PropTypes.number.isRequired,
-  aspectRatio: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   price: PropTypes.string,
   description: PropTypes.string.isRequired,
   showHeader: PropTypes.bool,
-  shouldWait: PropTypes.bool,
   onUser: PropTypes.func,
 };
 
@@ -83,8 +77,6 @@ PostItem.defaultProps = {
   name: undefined,
   price: undefined,
   showHeader: true,
-  shouldWait: true,
-  changed: [],
   onUser: undefined,
 };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Picker } from 'react-native';
+import { Picker, Linking } from 'react-native';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
@@ -12,6 +12,7 @@ import PostItem from '../../components/PostItem';
 import {
   Container, ProfileContainer, Avatar, DetailsContainer, Name, Username, Description,
   EditContainer, EditButton, EditLabel, CategoryPicker, Icon, PickerContainer, PickerLabel,
+  LinkContainer, LinkButton, Link,
 } from './styles';
 
 import editar from '../../../assets/editarCatalogo.png';
@@ -52,6 +53,15 @@ function Catalog({ isSeller, navigation }) {
             <Description>{user.description}</Description>
           </DetailsContainer>
         </ProfileContainer>
+
+        <LinkContainer>
+          <LinkButton onPress={async () => {
+            await Linking.openURL(`https://viva-web.netlify.app/${user.username}`);
+          }}
+          >
+            <Link>Acesse o website</Link>
+          </LinkButton>
+        </LinkContainer>
 
         {
           isSeller

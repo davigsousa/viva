@@ -10,7 +10,6 @@ const OriginalAnimated = Animated.createAnimatedComponent(Original);
 
 function LazyImage({
   source,
-  aspectRatio,
   shouldLoad,
 }) {
   const opacity = new Animated.Value(0);
@@ -31,7 +30,7 @@ function LazyImage({
   return (
     <Small
       source={backfake}
-      ratio={aspectRatio}
+      ratio={1}
       blurRadius={1}
     >
       {
@@ -40,7 +39,7 @@ function LazyImage({
         <OriginalAnimated
           style={{ opacity }}
           source={source}
-          ratio={aspectRatio}
+          ratio={1}
           onLoadEnd={handleAnimate}
         />
         )
@@ -53,7 +52,6 @@ LazyImage.propTypes = {
   source: PropTypes.shape({
     uri: PropTypes.string,
   }).isRequired,
-  aspectRatio: PropTypes.number.isRequired,
   shouldLoad: PropTypes.bool.isRequired,
 };
 

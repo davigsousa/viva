@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
@@ -16,41 +16,57 @@ import {
 import camera from '../../../assets/iconesV/camera.png';
 
 import api from '../../services/api';
-import { setUser } from '../../services/auth';
-import feedV from '../../services/feedV';
-import feedC from '../../services/feedC';
+import { setUser, getStore } from '../../services/auth';
 
 
 function Feed({ isSeller, dispatch, navigation }) {
   const [feed, setFeed] = useState([]);
+  const [store, setStore] = useState({});
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [changed, setChanged] = useState([]);
 
-  /* async function loadPage(pageNumber = page, shouldRefresh = false) {
+  async function loadPageClient(pageNumber = page, shouldRefresh = false) {
     if (total && pageNumber > total) return;
 
     setLoading(true);
 
-    const res = await fetch(
-      `http://localhost:3000/feed?_expand=author&_limit=5&_page=${pageNumber}`,
-    );
+    const { data } = await api.get(`/feed?page=${pageNumber}`);
+    const { total_pages, posts: newPosts } = data;
 
-    const data = await res.json();
-    const totalItems = res.headers.get('X-Total-Count');
-
-    setTotal(Math.ceil(totalItems / 5));
-    setFeed(shouldRefresh ? data : [...feed, ...data]);
+    setTotal(Math.ceil(total_pages / 10));
+    setFeed(shouldRefresh ? newPosts : [...feed, ...newPosts]);
     setPage(page + 1);
     setLoading(false);
-  } */
+  }
+
+  async function loadPageSeller() {
+    setLoading(true);
+    const userStore = await getStore();
+    const { data } = await api.get(`/products/${userStore.username}`);
+    const { products } = data;
+    setFeed(products);
+    setStore(userStore);
+  }
 
   useEffect(() => {
-    // loadPage();
+    setFeed([]);
+    if (isSeller) {
+      loadPageSeller();
+    } else {
+      loadPageClient();
+    }
 
+    return () => {
+      setFeed([]);
+      setPage(1);
+      setTotal(0);
+    };
+  }, [isSeller]);
+
+  useEffect(() => {
     (async () => {
       setLoadingModal(true);
       const { data } = await api.get('/user');
@@ -63,25 +79,15 @@ function Feed({ isSeller, dispatch, navigation }) {
       });
       setLoadingModal(false);
     })();
-
-    return () => {
-      setFeed([]);
-      setPage(1);
-      setTotal(0);
-    };
   }, []);
 
   async function refreshList() {
     setRefreshing(true);
 
-    // await loadPage(1, true);
+    if (!isSeller) await loadPageClient(1, true);
 
     setRefreshing(false);
   }
-
-  const handleViewableChanged = useCallback(({ changed: itemsChanged }) => {
-    setChanged(itemsChanged.map(({ item }) => item.id));
-  }, []);
 
   return (
     <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
@@ -110,16 +116,14 @@ function Feed({ isSeller, dispatch, navigation }) {
             : undefined
         }
         <FlatList
-          data={isSeller ? feedV : feedC}
+          data={feed}
           onEndReached={() => {
-            // loadPage()
-            console.log('chegou ao fim');
+            if (!isSeller) loadPageClient();
           }}
           onEndReachedThreshold={0.1}
-          keyExtractor={(post) => String(post.id)}
+          keyExtractor={() => String(Math.random())}
           onRefresh={refreshList}
           refreshing={refreshing}
-          onViewableItemsChanged={handleViewableChanged}
           viewabilityConfig={{
             viewAreaCoveragePercentThreshold: 20,
           }}
@@ -127,14 +131,13 @@ function Feed({ isSeller, dispatch, navigation }) {
           renderItem={({ item }) => (
             <PostItem
               isSeller={isSeller}
-              avatar={item.author.avatar}
-              name={item.author.name}
+              avatar={store.url_image}
+              name={isSeller ? store.username : item.username}
               onUser={() => navigation.navigate('Catalog')}
-              changed={changed}
               id={item.id}
-              aspectRatio={item.aspectRatio}
-              image={item.image}
-              price={item.price}
+              aspect_ratio={Number.parseFloat(item.aspectRatio)}
+              image={item.url_image}
+              price={String(item.price).replace('.', ',')}
               description={item.description}
             />
           )}
