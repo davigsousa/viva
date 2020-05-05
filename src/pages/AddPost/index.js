@@ -8,14 +8,15 @@ import {
   CategoryPicker, PickerLabel,
 } from './styles';
 
-import api from '../../services/api';
-import { getUser } from '../../services/auth';
 import LoadingModal from '../../components/LoadingModal';
 import camera from '../../../assets/camera.png';
 import imageConfig from '../../config/imagepicker';
 
+import api from '../../services/api';
+import { getStore, getUser } from '../../services/auth';
 
-function AddPost({ navigation, dispatch }) {
+
+function AddPost({ navigation }) {
   const [previous, setPrevious] = useState('');
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(undefined);
@@ -27,7 +28,14 @@ function AddPost({ navigation, dispatch }) {
 
   useEffect(() => {
     setPrevious(navigation.state.params.previous_screen);
-  });
+    (async () => {
+      const res = await getStore();
+
+      const { data } = await api.get(`/categories/${res.username}`);
+      console.log('categories', data);
+      setOptions(data);
+    })();
+  }, []);
 
   const handleImage = () => {
     ImagePicker.showImagePicker(imageConfig, (response) => {
@@ -51,7 +59,7 @@ function AddPost({ navigation, dispatch }) {
 
     formData.append('file', photo);
     formData.append('name', 'default');
-    formData.append('price', price);
+    formData.append('price', Number.parseFloat(price.replace(',', '.')));
     formData.append('description', description);
     formData.append('category', selectedOption);
 
@@ -63,8 +71,7 @@ function AddPost({ navigation, dispatch }) {
 
     setLoading(true);
     try {
-      const { email: oldUserEmail } = await getUser();
-      await api.put('/user', { email: oldUserEmail, shop_pass: true });
+      await api.post('/product', formData, config);
 
       setLoading(false);
       navigation.navigate(previous);
@@ -72,7 +79,7 @@ function AddPost({ navigation, dispatch }) {
       setLoading(false);
     }
 
-    setDescription(''); setPrice(''); setPreview(''); setImage({});
+    setDescription(''); setPrice(''); setPreview(undefined); setImage({});
   };
 
   return (
@@ -117,6 +124,7 @@ function AddPost({ navigation, dispatch }) {
             selectedValue={selectedOption}
             onValueChange={(itemValue) => setSelectedOption(itemValue)}
           >
+            <Picker.Item key={Math.random()} label="Todos os Produtos" value="" />
             {
               options.map((item) => (
                 <Picker.Item key={Math.random()} label={item} value={item} />

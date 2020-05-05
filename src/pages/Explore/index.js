@@ -5,6 +5,7 @@ import { FlatList } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import { NavigationActions } from 'react-navigation';
 
+import NotFound from '../../components/NotFound';
 import OrderItem from '../../components/OrderItem';
 import StoreItem from '../../components/StoreItem';
 import IconButton from '../../components/IconButton';
@@ -30,6 +31,7 @@ function Explore({ isSeller, navigation }) {
   async function loadStores() {
     const res = await api.get('/explorer');
     const stores = res.data;
+    console.log('stores', stores);
     setStores(stores);
   }
 
@@ -45,7 +47,7 @@ function Explore({ isSeller, navigation }) {
       }
     })();
   }, [isSeller]);
-  console.log(orders);
+
   return (
     <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
       <Container>

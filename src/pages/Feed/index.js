@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 import { View, FlatList } from 'react-native';
 
+import NotFound from '../../components/NotFound';
 import LoadingModal from '../../components/LoadingModal';
 import IconButton from '../../components/IconButton';
 import PostItem from '../../components/PostItem';
@@ -29,6 +30,7 @@ function Feed({ isSeller, dispatch, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   async function loadPageClient(pageNumber = page, shouldRefresh = false) {
+    console.log('cliente', total, pageNumber);
     if (total && pageNumber > total) return;
 
     setLoading(true);
@@ -36,7 +38,7 @@ function Feed({ isSeller, dispatch, navigation }) {
     const { data } = await api.get(`/feed?page=${pageNumber}`);
     const { total_pages, posts: newPosts } = data;
 
-    setTotal(Math.ceil(total_pages / 10));
+    setTotal(Math.ceil(total_pages / 10) + 1);
     setFeed(shouldRefresh ? newPosts : [...feed, ...newPosts]);
     setPage(page + 1);
     setLoading(false);
@@ -120,6 +122,7 @@ function Feed({ isSeller, dispatch, navigation }) {
             )
             : undefined
         }
+
         <FlatList
           data={feed}
           onEndReached={() => {
@@ -147,7 +150,6 @@ function Feed({ isSeller, dispatch, navigation }) {
             />
           )}
         />
-
         <LoadingModal isVisible={loadingModal} />
       </View>
     </ThemeProvider>
