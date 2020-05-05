@@ -20,14 +20,21 @@ import api from '../../services/api';
 function EditCatalogo({ navigation }) {
   const [catmodal, setCatmodal] = useState(false);
   const [newcat, setNewcat] = useState('');
-  const [store, setStore] = useState({});
+  const [store, setStore] = useState(null);
 
   const [posts, setPosts] = useState([]);
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 
+  const handleNewCat = async (cat) => {
+    await api.post('/category', { name: cat });
+    setOptions([...options, cat]);
+  };
+
   const fetchNewPosts = async () => {
-    const { data } = await api.get(`/products/${store.username}`, {
+    const res = await getStore();
+    setPosts([]);
+    const { data } = await api.get(`/products/${res.username}`, {
       category: selectedOption,
     });
     const { products } = data;
@@ -36,9 +43,9 @@ function EditCatalogo({ navigation }) {
 
   useEffect(() => {
     (async () => {
-      setStore(await getStore());
+      const res = await getStore();
 
-      const { data } = await api.get(`/categories/${store.username}`);
+      const { data } = await api.get(`/categories/${res.username}`);
       console.log('categories', data);
       setOptions(data);
     })();
@@ -52,7 +59,7 @@ function EditCatalogo({ navigation }) {
     <Container>
       <AddCategoryContainer>
         <AddCategoryButton onPress={() => setCatmodal(true)}>
-          <Text>Adicionar nova categoria</Text>
+          <Text>Adicionar Categoria</Text>
           <Entypo name="circle-with-plus" size={20} color="white" />
         </AddCategoryButton>
       </AddCategoryContainer>
@@ -63,6 +70,7 @@ function EditCatalogo({ navigation }) {
           selectedValue={selectedOption}
           onValueChange={(itemValue) => setSelectedOption(itemValue)}
         >
+          <Picker.Item key={Math.random()} label="Todos os produtos" value="" />
           {
               options.map((item) => (
                 <Picker.Item key={Math.random()} label={item} value={item} />
@@ -106,7 +114,7 @@ function EditCatalogo({ navigation }) {
 
       <AddCategoryModal
         isVisible={catmodal}
-        onConfirm={(cat) => setNewcat(cat)}
+        onConfirm={handleNewCat}
         onClose={() => setCatmodal(false)}
       />
     </Container>

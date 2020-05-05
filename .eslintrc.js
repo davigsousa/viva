@@ -30,5 +30,6 @@ module.exports = {
     "react/prop-types": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "camelcase": "off",
+    "quote-props": "off",
   },
 };
