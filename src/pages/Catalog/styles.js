@@ -114,3 +114,27 @@ export const Link = styled.Text`
   text-align: center;
   font-size: 20px;
 `;
+
+
+export const FavContainer = styled.View`
+  width: 100%;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  background-color: #993366;
+`;
+
+export const FavButton = styled(RectButton)`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0 20px 0 20px;
+  border-radius: 20px;
+`;
+
+export const Fav = styled.Text`
+  color: white;
+  text-align: center;
+  font-size: 20px;
+`;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Linking } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -18,10 +18,11 @@ import diamante from '../../../assets/iconesC/diamante.png';
 
 
 function PostItem({
-  isSeller, avatar, name, image,
+  isSeller, name, image,
   price, description, showHeader = true, onUser,
 }) {
   const [buyModal, setBuyModal] = useState(false);
+  const [avatar, setAvatar] = useState('');
 
   const handleBuy = async () => {
     const { data } = await api.get(`/contact/${name}`);
@@ -31,6 +32,14 @@ function PostItem({
 
     await Linking.openURL(url);
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await api.get(`/products/${name}/all`);
+      const { store: newStore } = data;
+      setAvatar(newStore.url_image);
+    })();
+  }, []);
 
   return (
     <Post>
@@ -86,7 +95,6 @@ function PostItem({
 
 PostItem.propTypes = {
   isSeller: PropTypes.bool.isRequired,
-  avatar: PropTypes.string,
   name: PropTypes.string,
   image: PropTypes.string.isRequired,
   price: PropTypes.string,
@@ -96,7 +104,6 @@ PostItem.propTypes = {
 };
 
 PostItem.defaultProps = {
-  avatar: undefined,
   name: undefined,
   price: undefined,
   showHeader: true,

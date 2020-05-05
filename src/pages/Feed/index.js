@@ -139,7 +139,6 @@ function Feed({ isSeller, dispatch, navigation }) {
           renderItem={({ item }) => (
             <PostItem
               isSeller={isSeller}
-              avatar={store.url_image}
               name={isSeller ? store.username : item.username}
               onUser={() => {
                 const navigateAction = NavigationActions.navigate({

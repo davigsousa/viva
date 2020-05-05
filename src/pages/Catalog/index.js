@@ -11,7 +11,7 @@ import PostItem from '../../components/PostItem';
 import {
   Container, ProfileContainer, Avatar, DetailsContainer, Name, Username, Description,
   EditContainer, EditButton, EditLabel, CategoryPicker, Icon, PickerContainer, PickerLabel,
-  LinkContainer, LinkButton, Link,
+  LinkContainer, LinkButton, Link, FavContainer, FavButton, Fav,
 } from './styles';
 
 import editar from '../../../assets/editarCatalogo.png';
@@ -58,6 +58,20 @@ function Catalog({ isSeller, navigation }) {
             <Description>{store.description}</Description>
           </DetailsContainer>
         </ProfileContainer>
+
+        {
+          !isSeller && (
+            <FavContainer>
+              <FavButton onPress={async () => {
+                await api.post(`/store-like/${store.username}`);
+              }}
+              >
+                <Fav>Favorite essa Loja</Fav>
+              </FavButton>
+            </FavContainer>
+
+          )
+        }
 
         <LinkContainer>
           <LinkButton onPress={async () => {
