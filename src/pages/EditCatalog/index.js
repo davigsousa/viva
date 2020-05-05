@@ -68,7 +68,10 @@ function EditCatalogo({ navigation }) {
         <PickerLabel>Categoria:</PickerLabel>
         <CategoryPicker
           selectedValue={selectedOption}
-          onValueChange={(itemValue) => setSelectedOption(itemValue)}
+          onValueChange={(itemValue) => {
+            console.log('mudou haueaueauheau');
+            setSelectedOption(itemValue);
+          }}
         >
           <Picker.Item key={Math.random()} label="Todos os produtos" value="" />
           {
