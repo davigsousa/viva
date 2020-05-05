@@ -35,10 +35,3 @@ export const Input = styled.TextInput`
   font-size: 20px;
   padding: 0 10px 0 10px;
 `;
-
-export const Loading = styled.ActivityIndicator.attrs({
-  size: 'small',
-  collor: '#999',
-})`
-  margin: 30px 0;
-`;
