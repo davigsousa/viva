@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavigationActions } from 'react-navigation';
 import { ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
@@ -108,7 +109,15 @@ function Profile({ isSeller, dispatch, navigation }) {
                 <ProfileButton
                   icon={posts}
                   label="Meu Catálogo"
-                  onPress={() => navigation.navigate('Catalog')}
+                  onPress={() => {
+                    const navigateAction = NavigationActions.navigate({
+                      routeName: 'Catalog',
+                      params: { store },
+                      action: NavigationActions.navigate({ routeName: 'Catalog' }),
+                    });
+
+                    navigation.dispatch(navigateAction);
+                  }}
                 />
               )
               : (

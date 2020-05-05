@@ -6,26 +6,47 @@ import { Entypo } from '@expo/vector-icons';
 import AddCategoryModal from '../../components/AddCategoryModal';
 import PostItem from '../../components/PostItem';
 
+
 import {
   Container, CategoryPicker, PickerContainer, PickerLabel,
   AddCategoryContainer, AddCategoryButton, Text, AddPostWrapper,
   AddPostContainer, AddPostButton, AddPost,
 } from './styles';
 
+import { getStore } from '../../services/auth';
+import api from '../../services/api';
+
 
 function EditCatalogo({ navigation }) {
   const [catmodal, setCatmodal] = useState(false);
   const [newcat, setNewcat] = useState('');
+  const [store, setStore] = useState({});
 
   const [posts, setPosts] = useState([]);
-  const [options, setOptions] = useState([
-    'Todos os Produtos', 'Sapatos', 'Camisas', 'Calças', 'Relógios',
-  ]);
+  const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 
-  useEffect(() => {
+  const fetchNewPosts = async () => {
+    const { data } = await api.get(`/products/${store.username}`, {
+      category: selectedOption,
+    });
+    const { products } = data;
+    setPosts(products);
+  };
 
+  useEffect(() => {
+    (async () => {
+      setStore(await getStore());
+
+      const { data } = await api.get(`/categories/${store.username}`);
+      console.log('categories', data);
+      setOptions(data);
+    })();
   }, []);
+
+  useEffect(() => {
+    fetchNewPosts();
+  }, [selectedOption]);
 
   return (
     <Container>
@@ -71,14 +92,12 @@ function EditCatalogo({ navigation }) {
       {
           posts.map((item) => (
             <PostItem
-              key={item.id}
+              key={String(Math.random())}
               isSeller
               showHeader={false}
               shouldWait={false}
               id={item.id}
-              name={item.author.name}
-              aspectRatio={item.aspectRatio}
-              image={item.image}
+              image={item.url_image}
               price={item.price}
               description={item.description}
             />

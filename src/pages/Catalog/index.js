@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 
-import postsApparel from '../../services/postsApparel';
-import feedV from '../../services/feedV';
+import api from '../../services/api';
 
 import PostItem from '../../components/PostItem';
 
@@ -19,44 +18,45 @@ import editar from '../../../assets/editarCatalogo.png';
 
 function Catalog({ isSeller, navigation }) {
   const [posts, setPosts] = useState([]);
-  const [user, setUser] = useState({ username: '', image: 'https://fabianoalves.adv.br/wp-content/uploads/2016/11/avatar-default-2.png', description: '' });
-  const [options, setOptions] = useState([
-    'Todos os Produtos', 'Sapatos', 'Camisas', 'Calças', 'Relógios',
-  ]);
+  const [store, setStore] = useState(navigation.state.params.store);
+  const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 
+  const fetchNewPosts = async () => {
+    const { data } = await api.get(`/products/${store.username}`, {
+      category: selectedOption,
+    });
+    const { products } = data;
+    setPosts(products);
+  };
+
   useEffect(() => {
-    setUser(isSeller
-      ? {
-        name: 'Lojas Maia',
-        username: 'lojasmaia',
-        description: 'Uma loja especial para você!',
-        image: 'https://img.elo7.com.br/product/main/2261CBD/logo-semi-pronta-logotipo-logo-loja.jpg',
-      }
-      : {
-        name: 'Apparel Vintage',
-        username: 'apparel.vintage',
-        description: 'A loja que vai mudar os seus conceitos.',
-        image: 'https://image.freepik.com/vetores-gratis/logo-para-moda-e-loja-de-roupas_116238-18.jpg',
-      });
-    setPosts(isSeller ? feedV : postsApparel);
-  }, [isSeller]);
+    (async () => {
+      const { data } = await api.get(`/categories/${store.username}`);
+      console.log(data);
+      setOptions(data);
+    })();
+  }, []);
+
+  useEffect(() => {
+    fetchNewPosts();
+  }, [selectedOption]);
 
   return (
     <ThemeProvider theme={{ color: (isSeller ? '#993366' : '#ff6600') }}>
       <Container>
         <ProfileContainer>
-          <Avatar source={{ uri: user.image }} resizeMode="cover" />
+          <Avatar source={{ uri: store.url_image }} resizeMode="cover" />
           <DetailsContainer>
-            <Name>{user.name}</Name>
-            <Username>{user.username}</Username>
-            <Description>{user.description}</Description>
+            <Name>{store.name}</Name>
+            <Username>{store.username}</Username>
+            <Description>{store.description}</Description>
           </DetailsContainer>
         </ProfileContainer>
 
         <LinkContainer>
           <LinkButton onPress={async () => {
-            await Linking.openURL(`https://viva-web.netlify.app/${user.username}`);
+            await Linking.openURL(`https://viva-web.netlify.app/${store.username}`);
           }}
           >
             <Link>Acesse o website</Link>
@@ -82,6 +82,7 @@ function Catalog({ isSeller, navigation }) {
             selectedValue={selectedOption}
             onValueChange={(itemValue) => setSelectedOption(itemValue)}
           >
+            <Picker.Item label="Todos os Produtos" value="" />
             {
               options.map((item) => (
                 <Picker.Item key={Math.random()} label={item} value={item} />
@@ -93,15 +94,14 @@ function Catalog({ isSeller, navigation }) {
         {
           posts.map((item) => (
             <PostItem
-              key={item.id}
+              key={String(Math.random())}
               isSeller={isSeller}
               showHeader={false}
               shouldWait={false}
               id={item.id}
-              name={item.author.name}
-              aspectRatio={item.aspectRatio}
-              image={item.image}
-              price={item.price}
+              name={item.name}
+              image={item.url_image}
+              price={String(item.price).replace('.', ',')}
               description={item.description}
             />
           ))

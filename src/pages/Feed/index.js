@@ -16,12 +16,12 @@ import {
 import camera from '../../../assets/iconesV/camera.png';
 
 import api from '../../services/api';
-import { setUser, getStore } from '../../services/auth';
+import { setUser, getStore, setStore } from '../../services/auth';
 
 
 function Feed({ isSeller, dispatch, navigation }) {
   const [feed, setFeed] = useState([]);
-  const [store, setStore] = useState({});
+  const [store, setStateStore] = useState({});
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -48,7 +48,7 @@ function Feed({ isSeller, dispatch, navigation }) {
     const { data } = await api.get(`/products/${userStore.username}`);
     const { products } = data;
     setFeed(products);
-    setStore(userStore);
+    setStateStore(userStore);
   }
 
   useEffect(() => {
@@ -71,6 +71,9 @@ function Feed({ isSeller, dispatch, navigation }) {
       setLoadingModal(true);
       const { data } = await api.get('/user');
       await setUser(data);
+      const { data: storeData } = await api.get('/store');
+      await setStore(storeData);
+
       console.log('get', data);
 
       dispatch({
