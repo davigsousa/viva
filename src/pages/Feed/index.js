@@ -71,8 +71,10 @@ function Feed({ isSeller, dispatch, navigation }) {
       setLoadingModal(true);
       const { data } = await api.get('/user');
       await setUser(data);
-      const { data: storeData } = await api.get('/store');
-      await setStore(storeData);
+      if (data.shop_pass) {
+        const { data: storeData } = await api.get('/store');
+        await setStore(storeData);
+      }
 
       console.log('get', data);
 
