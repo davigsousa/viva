@@ -18,7 +18,7 @@ import editar from '../../../assets/editarCatalogo.png';
 
 function Catalog({ isSeller, navigation }) {
   const [posts, setPosts] = useState([]);
-  const [store, setStore] = useState(navigation.state.params.store);
+  const [store, setStore] = useState(navigation.state.params.store || { default: 'value' });
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
 

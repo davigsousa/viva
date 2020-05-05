@@ -28,7 +28,7 @@ function PostItem({
     const { data } = await api.get(`/contact/${name}`);
     const { whatsapp } = data;
 
-    const url = `https://api.whatsapp.com/send?phone=${whatsapp}`;
+    const url = `https://api.whatsapp.com/send?phone=+55${whatsapp}`;
 
     await Linking.openURL(url);
   };
@@ -48,7 +48,7 @@ function PostItem({
           ? (
             <PostHeader>
               <User onPress={onUser}>
-                <Avatar source={{ uri: avatar }} />
+                <Avatar source={avatar && { uri: avatar }} />
                 <Name>{name}</Name>
               </User>
               <IconButton
