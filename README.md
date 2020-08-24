@@ -20,3 +20,10 @@ O nosso projeto tinha como objetivo permitir que qualquer pessoa pudesse ter o s
 ## Tecnologias utilizadas
 
 Para a construção do aplicativo, foi utilizado o React Native, que por sua vez, consumia uma api RESTful construída no Node.js com Express.
+
+# Screenshots
+
+<img src="./screenshots/1.jpeg" width="300px">
+<img src="./screenshots/2.jpeg" width="300px">
+<img src="./screenshots/3.jpeg" width="300px">
+<img src="./screenshots/4.jpeg" width="300px">
